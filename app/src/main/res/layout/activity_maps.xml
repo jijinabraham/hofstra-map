@@ -19,35 +19,69 @@
         map:layout_constraintTop_toTopOf="parent"
         map:layout_constraintVertical_bias="0.0">
 
-        <android.support.v4.widget.DrawerLayout
-            android:id="@+id/drawerlayout"
-            android:layout_width="0dp"
+        <RelativeLayout
+            android:id="@+id/left"
+            android:layout_width="69dp"
             android:layout_height="0dp"
+            android:layout_gravity="left"
+            android:background="@android:color/white"
+            android:visibility="gone"
             map:layout_constraintBottom_toBottomOf="parent"
-            map:layout_constraintEnd_toEndOf="parent"
             map:layout_constraintStart_toStartOf="parent"
             map:layout_constraintTop_toTopOf="parent">
 
-            <!--Middle layout-->
+            <!--Hold other controls by listview-->
+            <FrameLayout
+                android:id="@+id/left_listview"
+                android:layout_width="67dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="0dp"
+                android:background="#000080"
+                android:visibility="gone">
+
+
+            </FrameLayout>
+        </RelativeLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawerlayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent">
+
+        <!--Middle layout-->
+
+        <RelativeLayout
+            android:id="@+id/fragment_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <RelativeLayout
-                android:id="@+id/fragment_layout"
+                android:id="@+id/title_bar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="48dp">
 
-                <RelativeLayout
-                    android:id="@+id/title_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp">
+                <ImageButton
+                    android:id="@+id/leftmenu"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@android:drawable/ic_menu_sort_by_size"
+                    android:contentDescription="@string/app_name"
+                    android:padding="12dp" />
 
-                    <ImageView
-                        android:id="@+id/leftmenu"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:background="@android:drawable/ic_menu_sort_by_size"
-                        android:padding="12dp" />
-
-                    <!--<TextInputLayout
+                <!--<TextInputLayout
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:layout_centerVertical="true"
@@ -58,60 +92,40 @@
                         android:gravity="center"
                         android:text="Hofstra Map" />-->
 
-                    <ImageButton
-                        android:id="@+id/imageButton3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="352dp"
-                        android:layout_marginLeft="402dp"
-                        android:layout_weight="1"
-                        android:src="@android:drawable/ic_search_category_default" />
+                <ImageButton
+                    android:id="@+id/imageButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="352dp"
+                    android:layout_marginLeft="402dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/app_name"
+                    android:src="@android:drawable/ic_search_category_default" />
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_CenterVertical="true"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="50dp"
-                        android:layout_marginLeft="106dp">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:layout_width="300dp"
-                            android:layout_height="48dp"
-                            android:hint="Search" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                </RelativeLayout>
-
-                <com.google.android.gms.maps.MapView
-                    android:id="@+id/mapView"
-                    android:layout_width="400dp"
-                    android:layout_height="500dp"
-                    android:layout_marginHorizontal="2dp"
-                    android:layout_marginVertical="50dp" />
-
-            </RelativeLayout>
-
-            <!--left layout-->
-            <RelativeLayout
-                android:id="@+id/left"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:background="@android:color/white">
-
-                <!--Hold other controls by listview-->
-                <ListView
-                    android:id="@+id/left_listview"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginLeft="106dp">
 
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="300dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/app_name"
+                        android:hint="Search" />
 
-                </ListView>
+                </android.support.design.widget.TextInputLayout>
+
             </RelativeLayout>
 
-            <!--right layout
+        </RelativeLayout>
+
+        <!--left layout-->
+
+        <!--right layout
             <RelativeLayout
                 android:id="@+id/right"
                 android:layout_width="260dp"
@@ -138,6 +152,5 @@
                     android:textSize="14sp" />
             </RelativeLayout>-->
 
-        </android.support.v4.widget.DrawerLayout>
-    </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.DrawerLayout>
 </android.support.constraint.ConstraintLayout>
