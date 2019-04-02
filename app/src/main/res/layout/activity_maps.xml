@@ -1,36 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/map"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingTop="16dp"
-    android:paddingRight="16dp"
-    android:paddingBottom="16dp"
     tools:context=".MapsActivity">
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Where do you want to go"
-        android:inputType="textPersonName"
-        android:text="Name" />
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="1.0"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintVertical_bias="0.0">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:onClick="geoLocate"
-        android:text="Go"
-        tools:ignore="OnClick" />
+        <android.support.v4.widget.DrawerLayout
+            android:id="@+id/drawerlayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toTopOf="parent">
 
-    <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.google.android.gms.maps.MapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-    </LinearLayout>
+            <!--Middle layout-->
+
+            <RelativeLayout
+                android:id="@+id/fragment_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/title_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp">
+
+                    <ImageView
+                        android:id="@+id/leftmenu"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@android:drawable/ic_menu_sort_by_size"
+                        android:padding="12dp" />
+
+                    <!--<TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="106dp"
+                        android:layout_marginLeft="106dp"
+                        android:layout_toEndOf="@+id/leftmenu"
+                        android:layout_toRightOf="@+id/leftmenu"
+                        android:gravity="center"
+                        android:text="Hofstra Map" />-->
+
+                    <ImageButton
+                        android:id="@+id/imageButton3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="352dp"
+                        android:layout_marginLeft="402dp"
+                        android:layout_weight="1"
+                        android:src="@android:drawable/ic_search_category_default" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_CenterVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="50dp"
+                        android:layout_marginLeft="106dp">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="300dp"
+                            android:layout_height="48dp"
+                            android:hint="Search" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </RelativeLayout>
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="400dp"
+                    android:layout_height="500dp"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_marginVertical="50dp" />
+
+            </RelativeLayout>
+
+            <!--left layout-->
+            <RelativeLayout
+                android:id="@+id/left"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:background="@android:color/white">
+
+                <!--Hold other controls by listview-->
+                <ListView
+                    android:id="@+id/left_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                </ListView>
+            </RelativeLayout>
+
+            <!--right layout
+            <RelativeLayout
+                android:id="@+id/right"
+                android:layout_width="260dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:background="#62dec9">
+
+                <ImageView
+                    android:id="@+id/p_pic"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_action_user" />
+
+                <TextView
+                    android:id="@+id/right_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_below="@id/p_pic"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12dp"
+                    android:text="个人中心"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+            </RelativeLayout>-->
+
+        </android.support.v4.widget.DrawerLayout>
+    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>
