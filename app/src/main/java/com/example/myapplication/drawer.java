@@ -26,12 +26,14 @@ public class drawer extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
     }
 
-    public boolean onOptionsItemSeletected(MenuItem item)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
         {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
