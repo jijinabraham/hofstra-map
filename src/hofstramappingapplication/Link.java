@@ -37,4 +37,10 @@ public class Link {
 		else
 			return null;
 	}
+	
+	public String toString(int from){
+		String out = "" + from(from).id;
+		
+		return out;
+	}
 }

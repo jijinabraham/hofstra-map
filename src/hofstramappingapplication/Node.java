@@ -62,18 +62,74 @@ public class Node{
 	 * @param d is the distance between the two Nodes.
 	 */
 	public void addNeighbour(Node other, double dist) {
-		if(other.neighbours.get(this.id) != null) {								// If link already exists between the two nodes, 
-			this.neighbours.put(other.id, other.neighbours.get(this.id));		// add existing link to neighbours.
+		if(other != null) {
+			if(other.neighbours.get(this.id) != null) {								// If link already exists between the two nodes, 
+				this.neighbours.put(other.id, other.neighbours.get(this.id));		// add existing link to neighbours.
+			}
+			else {																	// Otherwise, create new link and store in 
+				this.neighbours.put(other.id, new Link(this, other, dist));			// neighbours.
+			}
 		}
-		else if(other != null){													// Otherwise, create new link and store in 
-			this.neighbours.put(other.id, new Link(this, other, dist));			// neighbours.
+		
+	}
+	public void addStruct(Struct other) {
+		if(other != null) {
+			this.struct.put(other.relevant.get("id"), other);
+			if(!other.nodes.get(this.id).equals(this)) {
+				other.nodes.put(this.id, this);
+			}
 		}
 	}
 	
-	public void addStruct(Struct other) {
-		this.struct.put(other.relevant.get("id"), other);
-		if(!other.nodes.get(this.id).equals(this)) {
-			other.nodes.put(this.id, this);
+	public String toString() {
+		String out = "" + id;
+		
+		if(coord != null) {
+			out = out + " : " + coord.toString() + "\n";
 		}
+		else {
+			out = out + " : null" + "\n";
+		}
+		
+		out = out + "\t" + "neighbours:";
+		
+		if(neighbours != null) {
+			if(neighbours.keySet().size() < 1) {
+				out = out + "\n\t\t" + "empty";
+			}
+			else {
+				for(int k = 0; k < this.neighbours.keySet().size(); k++) {
+					if(k%4 == 0) {
+						out = out + "\n\t";
+					}
+					out = out + "\t" + k + ", " + neighbours.get(neighbours.keySet().toArray()[k]).toString(id);
+				}	
+			}
+		}
+		else {
+			out = out + "\t" + "null";
+		}
+		
+		out = out + "\n\t" + "structs:" + "\n";
+		
+		if(struct != null) {
+			if(struct.keySet().size() < 1) {
+				out = out + "\t\t" + "empty";
+			}
+			else {
+				for(int k = 0; k < this.struct.keySet().size(); k++) {
+					if(k%4 == 0) {
+						out = out + "\n\t";
+					}
+					out = out + "\t" + k + ", " + struct.get(struct.keySet().toArray()[k]);
+				}	
+			}
+		}
+		else {
+			out = out + "\t" + "null";
+		}
+		
+		return out;
 	}
+	
 }

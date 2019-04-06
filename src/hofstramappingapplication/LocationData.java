@@ -17,4 +17,9 @@ public class LocationData {
 		this.latitude = lat;
 		this.longitude = lon;
 	}
+	
+	public String toString() {
+		String out = latitude + ", " + longitude;
+		return out;
+	}
 }

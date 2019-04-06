@@ -1,6 +1,7 @@
 package test_pck;
 
 import java.io.*;
+import hofstramappingapplication.*;
 
 public class Main {
 	
@@ -65,6 +66,10 @@ public class Main {
 		printConversion("31E10AC");
 		printConversion("E1510DB");
 		printConversion("CE3");
+		
+		NodeList nL = new NodeList();
+
+		System.out.println(nL.toString());
 		
 		
 	}

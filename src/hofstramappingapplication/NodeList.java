@@ -10,6 +10,22 @@ public class NodeList {
 	protected LinkedHashMap<Integer, Node> nodes;
 	protected LinkedHashMap<String, Struct> struct;
 	
+	boolean debugLines = true;
+	boolean searchOut = false;
+	boolean interimOut = false;
+	
+	public NodeList() {
+		nodes = new LinkedHashMap<Integer, Node>();
+		struct = new LinkedHashMap<String, Struct>();
+		parse_json();
+	}
+	
+	public NodeList(LinkedHashMap<Integer, Node> nd, LinkedHashMap<String, Struct> st) {
+		nodes = nd;
+		struct = st;
+	}
+	
+	
 	/**
 	 * Searches list of path nodes for a node with matching id.
 	 * @param id
@@ -25,10 +41,14 @@ public class NodeList {
 		return nodes.get(id);
 	}
 	
-	public void parse_json(String in) {
+	public void parse_json() {
 		//parse_struct( "struct.txt" );
-		parse_node( "node-hor.txt" );
-		parse_node( "node-ver.txt" );
+		if(debugLines)
+			System.out.println("Parsing node-hor.json...");
+		parse_node(new File("node-hor.json") );
+		if(debugLines)
+			System.out.println("Parsing node-ver.json...");
+		parse_node(new File("node-ver.json") );
 	}
 	
 	public void parse_struct(String in) {
@@ -47,8 +67,10 @@ public class NodeList {
 		    FileInputStream fis = new FileInputStream(in);
 		    InputStreamReader isr = new InputStreamReader(fis);
 		    BufferedReader br = new BufferedReader(isr);
-				
+		    
 		    while (br.ready()) {
+		    	if(debugLines)
+		    		System.out.println("Reading file...");
 		    	txt = txt + br.readLine();
 		    }
 		     
@@ -57,6 +79,8 @@ public class NodeList {
 		    br.close();
 		     
 		    try {
+		    	if(debugLines)
+		    		System.out.println("Parsing String...");
 		    	parse_node(txt);
 		    	return true;
 		    }
@@ -82,10 +106,22 @@ public class NodeList {
 		//Type A	-	Separates .json into entries; Each entry begins and ends with '{' and '}' respectively.
 		int iR = 0;
 		while(iR > -1) {
-			int iL = in.indexOf('}', iR);
-			if(iL != -1) {
-				entries.add(in.substring(iR, iL + 1));
-				iR = in.indexOf('{', iR);
+			if(debugLines)
+				System.out.println("Searching for entry start...");
+			iR = in.indexOf('{', iR + 1);
+			
+			if(debugLines){
+				if(iR > -1)
+					System.out.println("'{' found at index " + iR);
+				else
+					System.out.println("'{' not found");
+			}
+			
+			if(iR > -1) {
+				int iL = in.indexOf('}', iR);
+				if(iL != -1) {
+					entries.add(in.substring(iR, iL + 1));
+				}
 			}
 		}
 		
@@ -94,7 +130,11 @@ public class NodeList {
 		//	- struct
 		// *- pos (latitude, longitude)
 		for(String entry : entries) {
+			if(debugLines)
+				System.out.println("Parsing id...");
 			int id = parse_id(get_val(entry, "id"));
+			if(debugLines)
+				System.out.println(get_val(entry, "id") + " : " + id);
 			/*
 			double lat = Double.parseDouble( get_val(entry, "lat") );
 			double lon = Double.parseDouble( get_val(entry, "lng") );
@@ -129,12 +169,19 @@ public class NodeList {
 				
 				int iX = in.indexOf(prefix, i);
 				if(iX >= 0) {
-					int ix = iX + prefix.length() + 2;
+					int ix = iX + prefix.length();
+					
 					String suffix = in.substring(ix, ix + 2);
 					String key = prefix + suffix;
 					String key2 = prefix2 + suffix;
 					
-					nodes.get(parse_id( get_val(entry, "id") ))
+					if(debugLines) {
+						System.out.println("\t" + key + " : " + get_val(entry, key));
+						System.out.println("\t" + key2 + " : " + get_primitive(entry, key2));
+					}
+					
+					
+					nodes.get(id)
 						 .addNeighbour(nodes.get(parse_id( get_val(entry, key))), 
 									   Double.parseDouble( get_primitive(entry, key2)) );
 					
@@ -214,20 +261,28 @@ public class NodeList {
 			int index = in.indexOf("\"" + key + "\"");
 			int iC = in.indexOf(':', index);
 			int iR = iC + 1;
-//			while((in.charAt(iR) >= '0' && in.charAt(iR) <= '9')
-//					|| in.charAt(iR) != '.') {
-//				iR++;
-//			}
-			for(iR = iC + 1; in.charAt(iR) < '0' 
-							 || in.charAt(iR) > '9'
-							 || in.charAt(iR) != '.'; iR++){
-						iR++;
+			
+			for(iR = iC + 1; 
+						iR < in.length()
+						&& (in.charAt(iR) < '0' 
+							|| in.charAt(iR) > '9')
+						&& in.charAt(iR) != '.';
+								iR++){
+						if(debugLines && searchOut)
+							System.out.println("\t" + "Searching for number start at index " + iR + "..." + " (  " + in.charAt(iR) + "  )");
 					}
 			
 			int iL = iR + 1;
-			for(iL = iR + 1; (in.charAt(iR) >= '0' && in.charAt(iR) <= '9')
-					 		 || in.charAt(iR) == '.'; iR++){
-				iR++;
+			for(iL = iR + 1; iL < in.length()
+							&& (	(in.charAt(iL) >= '0' && in.charAt(iL) <= '9')
+									|| in.charAt(iL) == '.');
+								iL++){
+				if(debugLines && searchOut)
+					System.out.println("\t" + "Searching for number end at index " + iL + "..." + " (  " + in.charAt(iL) + "  )");
+			}
+			
+			if(debugLines && interimOut) {
+				System.out.println("\t" + in.substring(iR, iL) + "(" + in.charAt(iL) + ")");
 			}
 			
 			String out = in.substring(iR, iL); 
@@ -235,6 +290,15 @@ public class NodeList {
 		}
 		else
 			return null;
+	}
+	
+	public String toString() {
+		String out = "";
+		for(Integer k : nodes.keySet()) {
+			out = out + nodes.get(k).toString() + "\n";
+		}
+		
+		return out;
 	}
 
 }
