@@ -68,6 +68,7 @@ public class Node{
 			}
 			else {																	// Otherwise, create new link and store in 
 				this.neighbours.put(other.id, new Link(this, other, dist));			// neighbours.
+				other.addNeighbour(this, dist);
 			}
 		}
 		

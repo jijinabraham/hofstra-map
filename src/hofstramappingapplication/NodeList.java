@@ -11,8 +11,9 @@ public class NodeList {
 	protected LinkedHashMap<String, Struct> struct;
 	
 	boolean debugLines = true;
-	boolean searchOut = false;
-	boolean interimOut = false;
+	boolean searchOut = true;
+	boolean valueOut = false;
+	boolean primOut = false;
 	
 	public NodeList() {
 		nodes = new LinkedHashMap<Integer, Node>();
@@ -68,10 +69,18 @@ public class NodeList {
 		    InputStreamReader isr = new InputStreamReader(fis);
 		    BufferedReader br = new BufferedReader(isr);
 		    
+		    int debug = 0;
 		    while (br.ready()) {
-		    	if(debugLines)
-		    		System.out.println("Reading file...");
+		    	if(debugLines) {
+		    		if(debug % 3 == 0) {
+			    		System.out.print("\tReading file");
+			    		for(int i = ((debug/3)%3) + 1; i > 0; i--)
+			    			System.out.print(".");
+			    		System.out.println();
+		    		}
+		    	}
 		    	txt = txt + br.readLine();
+		    	debug++;
 		    }
 		     
 		    fis.close();
@@ -106,11 +115,11 @@ public class NodeList {
 		//Type A	-	Separates .json into entries; Each entry begins and ends with '{' and '}' respectively.
 		int iR = 0;
 		while(iR > -1) {
-			if(debugLines)
+			if(debugLines && searchOut)
 				System.out.println("Searching for entry start...");
 			iR = in.indexOf('{', iR + 1);
 			
-			if(debugLines){
+			if(debugLines && searchOut){
 				if(iR > -1)
 					System.out.println("'{' found at index " + iR);
 				else
@@ -119,6 +128,14 @@ public class NodeList {
 			
 			if(iR > -1) {
 				int iL = in.indexOf('}', iR);
+				
+				if(debugLines && searchOut){
+					if(iL > -1)
+						System.out.println("'}' found at index " + iL);
+					else
+						System.out.println("'}' not found");
+				}
+				
 				if(iL != -1) {
 					entries.add(in.substring(iR, iL + 1));
 				}
@@ -130,6 +147,9 @@ public class NodeList {
 		//	- struct
 		// *- pos (latitude, longitude)
 		for(String entry : entries) {
+			if(debugLines && valueOut) {
+				System.out.println(entry);
+			}
 			if(debugLines)
 				System.out.println("Parsing id...");
 			int id = parse_id(get_val(entry, "id"));
@@ -148,10 +168,10 @@ public class NodeList {
 			
 			for(int i = 0; i < entry.length(); i++) {
 				String prefix = "stru_";
-				int iX = in.indexOf(prefix, i);
+				int iX = entry.indexOf(prefix, i);
 				if(iX >= 0) {
 					int ix = iX + prefix.length();
-					String suffix = in.substring(ix, ix + 2);
+					String suffix = entry.substring(ix, ix + 2);
 					String key = prefix + suffix;
 				
 					nodes.get(id).addStruct(this.struct.get(get_val(in, key)));
@@ -167,11 +187,24 @@ public class NodeList {
 				String prefix = "ref_";
 				String prefix2 = "dist_";
 				
-				int iX = in.indexOf(prefix, i);
+				int iX = entry.indexOf(prefix, i + 1);
+				if(debugLines && searchOut) {
+					if(iX > -1) {
+						System.out.println("\t" + prefix + " found at index " + iX);
+					}
+				}
+				
+				
 				if(iX >= 0) {
 					int ix = iX + prefix.length();
 					
-					String suffix = in.substring(ix, ix + 2);
+					if(debugLines && valueOut) {
+						System.out.println("\t" + i + " : " + iX + " :: " + ix + " : " + entry.charAt(ix)
+																					   + entry.charAt(ix + 1));
+					}
+					
+					String suffix = entry.substring(ix, ix + 2);
+					
 					String key = prefix + suffix;
 					String key2 = prefix2 + suffix;
 					
@@ -184,7 +217,6 @@ public class NodeList {
 					nodes.get(id)
 						 .addNeighbour(nodes.get(parse_id( get_val(entry, key))), 
 									   Double.parseDouble( get_primitive(entry, key2)) );
-					
 					i = ix + 2;
 				}
 				else {
@@ -268,7 +300,7 @@ public class NodeList {
 							|| in.charAt(iR) > '9')
 						&& in.charAt(iR) != '.';
 								iR++){
-						if(debugLines && searchOut)
+						if(debugLines && primOut && searchOut)
 							System.out.println("\t" + "Searching for number start at index " + iR + "..." + " (  " + in.charAt(iR) + "  )");
 					}
 			
@@ -277,11 +309,11 @@ public class NodeList {
 							&& (	(in.charAt(iL) >= '0' && in.charAt(iL) <= '9')
 									|| in.charAt(iL) == '.');
 								iL++){
-				if(debugLines && searchOut)
+				if(debugLines && primOut && searchOut)
 					System.out.println("\t" + "Searching for number end at index " + iL + "..." + " (  " + in.charAt(iL) + "  )");
 			}
 			
-			if(debugLines && interimOut) {
+			if(debugLines && primOut && valueOut) {
 				System.out.println("\t" + in.substring(iR, iL) + "(" + in.charAt(iL) + ")");
 			}
 			
