@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings_white"
             android:checkableBehavior="single"
             android:title="@string/setting" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:id="@+id/nav_place"
+            android:icon="@drawable/ic_place_white"
             android:checkableBehavior="single"
             android:title="@string/location" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help_white"
             android:checkableBehavior="single"
             android:title="@string/tutorial" />
     </group>

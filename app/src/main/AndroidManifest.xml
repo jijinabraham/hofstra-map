@@ -15,8 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".drawer"></activity>
-        <activity android:name=".setting" />
+        <activity android:name=".Location"></activity>
+        <activity android:name=".Setting" />
+        <activity android:name=".tutorial" />
+        <activity android:name=".drawer" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
