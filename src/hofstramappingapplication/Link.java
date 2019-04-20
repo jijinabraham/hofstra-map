@@ -38,6 +38,16 @@ public class Link {
 			return null;
 	}
 	
+	public double dist() {
+		return dist;
+	}
+	
+	public String toString() {
+		String out = alpha.id + " :: " + beta.id + ", " + dist + " m";
+		
+		return out;
+	}
+	
 	public String toString(int from){
 		String out = "" + from(from).id;
 		

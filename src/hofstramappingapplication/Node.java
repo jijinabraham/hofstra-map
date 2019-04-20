@@ -9,6 +9,8 @@ public class Node{
 	protected LinkedHashMap<String, Struct> struct;
 	// protected LatLng pos;
 	
+	private boolean debugLines = false;
+	
 	public Node() {
 		coord = null;
 		id = -1;
@@ -20,6 +22,12 @@ public class Node{
 		id = i;
 		neighbours = n;
 		struct = s;
+	}
+	public Node(Node n) {
+		this.coord = n.coord;
+		this.id = n.id;
+		this.neighbours = n.neighbours;
+		this.struct = n.struct;
 	}
 	
 	/**
@@ -38,15 +46,21 @@ public class Node{
 	 * @param other is the target node.
 	 * @return Distance between the two nodes.
 	 */
-	public double getCost(Node other) {
-		return neighbours.get(other.id).dist;
+	public double getCost(Node to) {
+		if(debugLines) {
+			System.out.println(this.id + " -> " + to.id);
+			System.out.println(neighbours.keySet());
+			
+			System.out.println(neighbours.get(to.id).toString());
+		}
+		return neighbours.get(to.id).dist;
 	}
 	
 	/**
 	 * Constructs and returns a list of neighbours.
 	 * @return LinkedList of Nodes.
 	 */
-	public List<Node> getNeighbors() {
+	public List<Node> _getNeighbors() {
 		List<Node> nb = new LinkedList<Node>();
 		
 		for(Integer i : neighbours.keySet()) {
@@ -80,6 +94,10 @@ public class Node{
 				other.nodes.put(this.id, this);
 			}
 		}
+	}
+	
+	public LinkedHashMap<Integer, Link> neighbours(){
+		return neighbours;
 	}
 	
 	public String toString() {

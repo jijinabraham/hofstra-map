@@ -10,15 +10,41 @@ public class NodeList {
 	protected LinkedHashMap<Integer, Node> nodes;
 	protected LinkedHashMap<String, Struct> struct;
 	
-	boolean debugLines = true;
-	boolean searchOut = true;
-	boolean valueOut = false;
-	boolean primOut = false;
+	//Functional Flags
+	boolean useHor = true;													// Set to true to use node-hor.json
+	boolean useVer = true;													// Set to true to use node-ver.json
+	boolean useStruct = true;												// Set to true to use struct.json
+	
+	//Debug Flags
+	boolean debugLines = false;											// Set to true if you want to see debug output
+	boolean searchOut = true;											// Set to true to see debug search messages
+	boolean valueOut = false;											// Set to true to see values for debug purposes
+	boolean primOut = false;											// Set to true to see output from get_primitive()
 	
 	public NodeList() {
 		nodes = new LinkedHashMap<Integer, Node>();
 		struct = new LinkedHashMap<String, Struct>();
-		parse_json();
+		parse_all();
+	}
+	
+	public NodeList(File hori, File vert, File struc) {
+		nodes = new LinkedHashMap<Integer, Node>();
+		struct = new LinkedHashMap<String, Struct>();
+		
+		if(debugLines)
+			System.out.println("Parsing node-hor.json...");
+		String hor = parse_file(new File("node-hor.json") );
+		parse_node(hor);
+		
+		if(debugLines)
+			System.out.println("Parsing node-ver.json...");
+		String ver = parse_file(new File("node-ver.json") );
+		parse_node(ver);
+		
+		if(debugLines)
+			System.out.println("Parsing struct.json...");
+		String str = parse_file(new File("struct.txt") );
+		parse_struct(str);
 	}
 	
 	public NodeList(LinkedHashMap<Integer, Node> nd, LinkedHashMap<String, Struct> st) {
@@ -42,18 +68,94 @@ public class NodeList {
 		return nodes.get(id);
 	}
 	
-	public void parse_json() {
-		//parse_struct( "struct.txt" );
-		if(debugLines)
-			System.out.println("Parsing node-hor.json...");
-		parse_node(new File("node-hor.json") );
-		if(debugLines)
-			System.out.println("Parsing node-ver.json...");
-		parse_node(new File("node-ver.json") );
+	public void parse_all() {
+		
+		if(useHor) {
+			if(debugLines)
+				System.out.println("Parsing node-hor.json...");
+			String hor = parse_file(new File("node-hor.json") );
+			parse_node(hor);
+		}
+		if(useVer) {
+			if(debugLines)
+				System.out.println("Parsing node-ver.json...");
+			String ver = parse_file(new File("node-ver.json") );
+			parse_node(ver);
+		}
+		if(useStruct) {
+			if(debugLines)
+				System.out.println("Parsing struct.json...");
+			String str = parse_file(new File("struct.txt") );
+			parse_struct(str);
+		}
 	}
 	
 	public void parse_struct(String in) {
+		LinkedList<String> entries = new LinkedList<String>();
 		
+		//Type A	-	Separates .json into entries; Each entry begins and ends with '{' and '}' respectively.
+		int iR = 0;
+		while(iR > -1) {
+			if(debugLines && searchOut)
+				System.out.println("Searching for entry start...");
+			iR = in.indexOf('{', iR + 1);
+			
+			if(debugLines && searchOut){
+				if(iR > -1)
+					System.out.println("'{' found at index " + iR);
+				else
+					System.out.println("'{' not found");
+			}
+			
+			if(iR > -1) {
+				int iL = in.indexOf('}', iR);
+				
+				if(debugLines && searchOut){
+					if(iL > -1)
+						System.out.println("'}' found at index " + iL);
+					else
+						System.out.println("'}' not found");
+				}
+				
+				if(iL != -1) {
+					entries.add(in.substring(iR, iL + 1));
+				}
+			}
+		}
+		
+		//First Parse - data into new Nodes
+		//	- id
+		//	- struct
+		// *- pos (latitude, longitude)
+		for(String entry : entries) {
+			if(debugLines && valueOut) {
+				System.out.println(entry);
+			}
+			String id = get_val(entry, "id");
+			
+			LinkedHashMap<String, String> relevant = new LinkedHashMap<String, String>();
+			relevant.put("id", id);
+			
+			/*
+			for(int i = 0; i < entry.length(); i++) {
+				String prefix = "name";
+				int iX = entry.indexOf(prefix, i);
+				if(iX >= 0) {
+					int ix = iX + prefix.length();
+					String suffix = entry.substring(ix, ix + 2);
+					String key = prefix + suffix;
+				
+//					nodes.get(id).addStruct(this.struct.get(get_val(in, key)));
+					
+					i = ix + 2;
+				}
+				else {
+					break;
+				}
+			}
+			*/
+			
+		}
 	}
 	
 	/**
@@ -61,7 +163,7 @@ public class NodeList {
 	 * @param in
 	 * @return
 	 */
-	public boolean parse_node(File in) {
+	public String parse_file(File in) {
 		//Temporary Implementation
 		String txt = "";
 		try {
@@ -88,23 +190,23 @@ public class NodeList {
 		    br.close();
 		     
 		    try {
-		    	if(debugLines)
+/*		    	if(debugLines)
 		    		System.out.println("Parsing String...");
-		    	parse_node(txt);
-		    	return true;
+		    	parse_node(txt);*/
+		    	return txt;
 		    }
 		    catch(Error e) {
-		    	 return false;
+		    	 return null;
 		    }
 		     
 		}
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 		
 	}
@@ -155,12 +257,12 @@ public class NodeList {
 			int id = parse_id(get_val(entry, "id"));
 			if(debugLines)
 				System.out.println(get_val(entry, "id") + " : " + id);
-			/*
-			double lat = Double.parseDouble( get_val(entry, "lat") );
-			double lon = Double.parseDouble( get_val(entry, "lng") );
-			LocationData loc = new LocationData(lat, lng);
-			 */
-			LocationData loc = null;
+			
+//			LocationData loc = null;
+			
+			double lat = Double.parseDouble( get_primitive(entry, "lat") );
+			double lon = Double.parseDouble( get_primitive(entry, "lng") );
+			LocationData loc = new LocationData(lat, lon);
 
 			nodes.put(id, new Node(loc, id, 
 					   new LinkedHashMap<Integer, Link>(),
@@ -211,9 +313,12 @@ public class NodeList {
 					if(debugLines) {
 						System.out.println("\t" + key + " : " + get_val(entry, key));
 						System.out.println("\t" + key2 + " : " + get_primitive(entry, key2));
+						if(/*valueOut = */true) {
+							System.out.println(entry);
+						}
+						
 					}
-					
-					
+				
 					nodes.get(id)
 						 .addNeighbour(nodes.get(parse_id( get_val(entry, key))), 
 									   Double.parseDouble( get_primitive(entry, key2)) );
@@ -315,6 +420,10 @@ public class NodeList {
 			
 			if(debugLines && primOut && valueOut) {
 				System.out.println("\t" + in.substring(iR, iL) + "(" + in.charAt(iL) + ")");
+			}
+			
+			if(in.charAt(iR - 1) == '-') {
+				iR = iR - 1;
 			}
 			
 			String out = in.substring(iR, iL); 

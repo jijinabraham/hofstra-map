@@ -18,6 +18,14 @@ public class LocationData {
 		this.longitude = lon;
 	}
 	
+	public double getLat() {
+		return latitude;
+	}
+	
+	public double getLon() {
+		return longitude;
+	}
+	
 	public String toString() {
 		String out = latitude + ", " + longitude;
 		return out;

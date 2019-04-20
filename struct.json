@@ -1,0 +1,369 @@
+[
+    {
+        "id" : "MEML00",
+        "name00" : "Memorial Hall",
+        "name01" : "Bits & Bytes",
+        "name02" : "Student Financial Services",
+        
+        "lat" : 40.71370920426692,
+		"lng" : -73.60166322969508,
+        
+        "path00" : "3103001",
+        "path01" : "3106008",
+        "path02" : "3004001"
+    },
+    {
+        "id" : "MEML01",
+        "name00" : "Academic Advisement",
+        
+        "lat" : 40.713995864573015,
+		"lng" : -73.60184025549006,
+        
+        "path00" : "3102001"
+    },
+    {
+        "id" : "HAUSR00",
+        "name00" : "Hauser Hall",
+        "name01" : "Department of Psychology",
+        
+        "lat" : 40.71434570477824,
+		"lng" : -73.60163622399637,
+        
+        "path00" : "3102002",
+        "path01" : "3102003"
+    },
+    {
+        "id" : "LIBRY00",
+        "name00" : "Axinn Library",
+        "name01" : "The President's Office (West Wing)",
+        "name02" : "Honors College",
+        "name03" : "Bulletin Office",
+        
+        "lat" : 40.71463493439309,
+		"lng" : -73.60081230528436,
+        
+        "path00" : "3008001"
+    },
+    {
+        "id" : "LIBRY01",
+        "name00" : "Hammer Computer Lab",
+        
+        "lat" : 40.71473860101402,
+		"lng" : -73.60048835734995,
+        
+        "path00" : "3008001"
+    },
+    {
+        "id" : "HEGER00",
+        "name00" : "Heger Hall",
+        "name01" : "Department of Religion",
+        "name02" : "Department of Philosophy",
+        
+        "lat" : 40.714940403322736,
+		"lng" : -73.59998685452882,
+        
+        "path00" : "3201001",
+        "path01" : "3201002"
+    },
+    {
+        "id" : "MASON00", // There's a Mason Hall & Gallon Wing.
+        "name00" : "Mason Hall", 
+        "name01" : "Gallon-Wing", // Unsure which department is...
+        "name02" : "Department of English", // in which building.
+        "name03" : "Department of Women's Studies",
+        "name04" : "Department of Writing Studies",
+        
+        "lat" : 40.71458813136285,
+		"lng" : -73.59937920078767,
+        
+        "path00" : "3103008",
+        "path01" : "3106010"
+    },
+    {
+        "id" : "PHLPS00",
+        "name00" : "Philips Hall",
+        "name01" : "Administrative Offices",
+        
+        "lat" : 40.714275044106174,
+		"lng" : -73.60008193954957,
+        
+        "path00" : "3104003",
+        "path01" : "3008002"
+    },
+    {
+        "id" : "HOFHL00",
+        "name00" : "Hofstra Hall",
+        "name01" : "Development Office",
+        
+        "lat" : 40.71404307257277,
+		"lng" : -73.6003861264611,
+        
+        "path00" : "3104002"
+    },
+    {
+        "id" : "DAVN00",
+        "name00" : "Davison Hall",
+        "name01" : "Department of Anthropology",
+        "name02" : "Department of Sociology",
+        
+        "lat" : 40.71397598202105,
+		"lng" : -73.60093329710014,
+        
+        "path00" : "3104001",
+        "path01" : "3007001"
+    },
+    {
+        "id" : "LOWE00",
+        "name00" : "Emily Lowe Hall",
+        "name01" : "Emily Lowe Gallery",
+        "name02" : "Department of Drama & Dance",
+        
+        "lat" : 40.7132828837781,
+		"lng" : -73.6013925075531,
+        
+        "path00" : "3106008",
+        "path01" : "3108003",
+        "path02" : "3003001"
+    },
+    {
+        "id" : "BARND00",
+        "name00" : "Barnard Hall",
+        "name01" : "Department of Economics",
+        "name02" : "Department of Political Science",
+        
+        "lat" : 40.71354935646173,
+		"lng" : -73.60067386175535,
+        
+        "path00" : "3007002"
+    },
+    {
+        "id" : "BROWR00",
+        "name00" : "Brower Hall", // No department associated with this building
+        
+        "lat" : 40.71385270564209,
+		"lng" : -73.59981633684794,
+        
+        "path00" : "3008003"
+    },
+    {
+        "id" : "PLYHS00",
+        "name00" : "Adams Playhouse",
+        "name01" : "The Globe Theater",
+        
+        "lat" : 40.713004302992495,
+		"lng" : -73.60071195850378,
+        
+        "path00" : "3108005",
+        "path01" : "3006001"
+    },
+    {
+        "id" : "SPIEG00",
+        "name00" : "Spiegel Theater",
+        
+        "lat" : 40.71418308199756,
+		"lng" : -73.59929521756487,
+        
+        "path00" : "3106010"
+    },
+    {
+        "id" : "CALK00",
+        "name00" : "Calkins Hall",
+        "name01" : "Department of Fine Arts",
+        "name02" : "Department of Comparative Literature",
+        "name03" : "Department of Foreign Language",
+        
+        "lat" : 40.71324449761693,
+		"lng" : -73.59997342215638,
+        
+        "path00" : "3108007",
+        "path01" : "3108008"
+    },
+    {
+        "id" : "DUNKN00",
+        "name00" : "Dunkin' On The Quad", // What a corny af name.
+        
+        "lat" : 40.712898632588455,
+		"lng" : -73.60015332698822,
+        
+        "path00" : "3109001"
+    },
+    {
+        "id" : "WELLR00",
+        "name00" : "Weller Hall",
+        "name01" : "Business School",
+        
+        "lat" : 40.71359843570906,
+		"lng" : -73.59923332929611,
+        
+        "path00" : "3109004"
+    },
+    {
+        "id" : "MCEWN00",
+        "name00" : "McEwen Hall",
+        "name01" : "Department of Information Technology",
+        "name02" : "Department of Telecommunications",
+        "name03" : "Help Desk",
+        
+        "lat" : 40.71308813580013,
+		"lng" : -73.59921991825104,
+        
+        "path00" : "3009001"
+    },
+    {
+        "id" : "AUBPN00",
+        "name00" : "Au Bon Pain",
+        
+        "lat" : 40.71291024148623,
+		"lng" : -73.5990500642539,
+        
+        "path00" : "310a009",
+        "path01" : "310a00a"
+    },
+    {
+        "id" : "RSVLT00",
+        "name00" : "Roosevelt Hall",
+        "name01" : "Department of Mathematics",
+        "name02" : "Departmentof Global Studies and Geography",
+        "name03" : "International Student Affairs",
+        
+        "lat" : 40.71258310439361,
+		"lng" : -73.59954073283473,
+        
+        "path00" : "310a006",
+        "path01" : "310a007",
+        "path02" : "310b004"
+    },
+    {
+        "id" : "CMCTR01",
+        "name00" : "The Lawrence Herbert School of Communication",
+        "name01" : "Media School",
+        
+        "lat" : 40.712530244017586,
+		"lng" : -73.60069140050211,
+        
+        "path00" : "310a003",
+        "path01" : "3006002"
+    },
+    {
+        "id" : "KOPPL00",
+        "name00" : "Bunny & Charles A. Koppelman Hall",
+        "name01" : "Maurice A. Deane School of Law",
+        "name02" : "Law School",
+        
+        "lat" : 40.71223439623034,
+		"lng" : 73.59996385130682,
+        
+        "path00" : "310b001",
+        "path01" : "310c003",
+        "path02" : "310c004",
+        "path03" : "300a001",
+        "path00" : "300a002"
+    },
+    { // The Law school is split into two buildings apparently
+        "id" : "KUSHN00",
+        "name00" : "Kushner Hall",
+        "name01" : "School of Law Library",
+        "name02" : "Maurice A. Deane School of Law",
+        "name03" : "Law School",
+        
+        "lat" : 40.7119700925464,
+		"lng" : -73.59949446472922,
+        
+        "path00" : "310b001",
+        "path01" : "3005002"
+    },
+    {
+        "id" : "BRESL00",
+        "name00" : "Breslin Hall",
+        
+        "lat" : 40.71193857934487,
+		"lng" : -73.60060573976449,
+        
+        "path00" : "310a002",
+        "path01" : "310c001",
+        "path02" : "3005001"
+    },
+    {
+        "id" : "ADAMS00",
+        "name00" : "Adams Hall",
+        "name01" : "Department of Computer Science",
+        
+        "lat" : 40.71330040059968,
+		"lng" : -73.60242175490225,
+        
+        "path00" : "3106004",
+        "path01" : "3106005"
+    },
+    {
+        "id" : "WEED00",
+        "name00" : "Weed Hall",
+        "name01" : "Department of Engineering",
+        
+        "lat" : 40.71310929186988,
+		"lng" : -73.60296624333228,
+        
+        "path00" : "3105002",
+        "path01" : "3106001",
+        "path02" : "3106002"
+    },
+    {
+        "id" : "BERN00",
+        "name00" : "Bernon Hall",
+        "name01" : "Admission Center",
+        
+        "lat" : 40.7137850231927,
+		"lng" : -73.60264344390424,
+        
+        "path00" : "3101003",
+        "path00" : "3002001"
+    },
+    {
+        "id" : "CMCTR00",
+        "name00" : "Saltzman Community Services Center",
+        "name01" : "Community Services Center",
+        "name02" : "Hofstra University Continuing Education",
+        
+        "lat" : 40.71368946959187,
+		"lng" : -73.60424204047712,
+        
+        "path00" : "3101001"
+        
+    },
+    {
+        "id" : "WLIBR00", // Seems to another part of the Axinn Library
+        "name00" : "West Library Wing",
+        
+        "lat" : 40.71454548110428,
+		"lng" : -73.601107348276,
+        
+        "path00" : "3008001"
+    },
+    {
+        "id" : "UNISP",
+        "name00" : "Unispan",
+        
+        "lat" : 40.71517207788174,
+		"lng" : -73.60098022454923,
+        
+        "path00" : "3008001"
+    },
+    {
+        "id" : "NETSP",
+        "name00" : "Netherspan",
+        
+        "lat" : 40.714141333060816,
+		"lng" : -73.60393283345525,
+        
+        "path00" : "3001001"
+    },
+    {
+        "id" : "SHAPR",
+        "name00" : "Joan & Donald Schaeffer Black Box Theater",
+        "name01" : "Shapiro Family Hall",
+        
+        "lat" : 40.71290305111857,
+		"lng" : -73.60209711604841,
+        
+        "path00" : "3108001"
+    }
+]
