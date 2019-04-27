@@ -34,6 +34,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        //Create new NodeList (should parse data on creation)
+    //  NodeList name_me = new NodeList();
+        //Pass NodeList to nav_place
+
     }
 
 
