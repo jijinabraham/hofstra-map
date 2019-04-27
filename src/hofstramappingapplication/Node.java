@@ -7,7 +7,6 @@ public class Node{
 	protected int id;
 	protected LinkedHashMap<Integer, Link> neighbours;
 	protected LinkedHashMap<String, Struct> struct;
-	// protected LatLng pos;
 	
 	private boolean debugLines = false;
 	
@@ -87,13 +86,16 @@ public class Node{
 		}
 		
 	}
-	public void addStruct(Struct other) {
-		if(other != null) {
-			this.struct.put(other.relevant.get("id"), other);
-			if(!other.nodes.get(this.id).equals(this)) {
+	
+	public boolean addStruct(Struct other) {
+		if(other != null) {		
+			this.struct.put(other.id, other);
+			if(!this.equals(other.nodes.get(this.id))) {
 				other.nodes.put(this.id, this);
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	public LinkedHashMap<Integer, Link> neighbours(){
@@ -140,7 +142,7 @@ public class Node{
 					if(k%4 == 0) {
 						out = out + "\n\t";
 					}
-					out = out + "\t" + k + ", " + struct.get(struct.keySet().toArray()[k]);
+					out = out + "\t" + k + ", " + struct.get(struct.keySet().toArray()[k]).id;
 				}	
 			}
 		}

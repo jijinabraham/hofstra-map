@@ -3,7 +3,7 @@ package hofstramappingapplication;
 import java.util.*;
 import java.io.*;
 
- 
+// Module 2 
 
 public class NodeList {
 	
@@ -27,31 +27,30 @@ public class NodeList {
 		parse_all();
 	}
 	
-	public NodeList(File hori, File vert, File struc) {
+	public NodeList(File hori, File vert, File stru) {
 		nodes = new LinkedHashMap<Integer, Node>();
 		struct = new LinkedHashMap<String, Struct>();
 		
 		if(debugLines)
 			System.out.println("Parsing node-hor.json...");
-		String hor = parse_file(new File("node-hor.json") );
-		parse_node(hor);
+		String hor = parse_file(hori);
+		parse_node(parse_entries(hor));
 		
 		if(debugLines)
 			System.out.println("Parsing node-ver.json...");
-		String ver = parse_file(new File("node-ver.json") );
-		parse_node(ver);
+		String ver = parse_file(vert);
+		parse_node(parse_entries(ver));
 		
 		if(debugLines)
 			System.out.println("Parsing struct.json...");
-		String str = parse_file(new File("struct.txt") );
-		parse_struct(str);
+		String str = parse_file(stru);
+		parse_struct(parse_entries(str));
 	}
 	
 	public NodeList(LinkedHashMap<Integer, Node> nd, LinkedHashMap<String, Struct> st) {
 		nodes = nd;
 		struct = st;
 	}
-	
 	
 	/**
 	 * Searches list of path nodes for a node with matching id.
@@ -74,23 +73,23 @@ public class NodeList {
 			if(debugLines)
 				System.out.println("Parsing node-hor.json...");
 			String hor = parse_file(new File("node-hor.json") );
-			parse_node(hor);
+			parse_node(parse_entries(hor));
 		}
 		if(useVer) {
 			if(debugLines)
 				System.out.println("Parsing node-ver.json...");
 			String ver = parse_file(new File("node-ver.json") );
-			parse_node(ver);
+			parse_node(parse_entries(ver));
 		}
 		if(useStruct) {
 			if(debugLines)
 				System.out.println("Parsing struct.json...");
-			String str = parse_file(new File("struct.txt") );
-			parse_struct(str);
+			String str = parse_file(new File("struct.json") );
+			parse_struct(parse_entries(str));
 		}
 	}
 	
-	public void parse_struct(String in) {
+	public LinkedList<String> parse_entries(String in){
 		LinkedList<String> entries = new LinkedList<String>();
 		
 		//Type A	-	Separates .json into entries; Each entry begins and ends with '{' and '}' respectively.
@@ -123,6 +122,11 @@ public class NodeList {
 			}
 		}
 		
+		return entries;
+	}
+	
+	public void parse_struct(LinkedList<String> entries) {
+		
 		//First Parse - data into new Nodes
 		//	- id
 		//	- struct
@@ -133,10 +137,12 @@ public class NodeList {
 			}
 			String id = get_val(entry, "id");
 			
-			LinkedHashMap<String, String> relevant = new LinkedHashMap<String, String>();
-			relevant.put("id", id);
+			double lat = Double.parseDouble( get_primitive(entry, "lat") );
+			double lon = Double.parseDouble( get_primitive(entry, "lng") );
+			LocationData loc = new LocationData(lat, lon);
 			
-			/*
+			struct.put(id, new Struct(id, loc));
+		
 			for(int i = 0; i < entry.length(); i++) {
 				String prefix = "name";
 				int iX = entry.indexOf(prefix, i);
@@ -145,7 +151,7 @@ public class NodeList {
 					String suffix = entry.substring(ix, ix + 2);
 					String key = prefix + suffix;
 				
-//					nodes.get(id).addStruct(this.struct.get(get_val(in, key)));
+					struct.get(id).addName(get_val(entry, key));
 					
 					i = ix + 2;
 				}
@@ -153,7 +159,23 @@ public class NodeList {
 					break;
 				}
 			}
-			*/
+			
+			for(int i = 0; i < entry.length(); i++) {
+				String prefix = "path";
+				int iX = entry.indexOf(prefix, i);
+				if(iX >= 0) {
+					int ix = iX + prefix.length();
+					String suffix = entry.substring(ix, ix + 2);
+					String key = prefix + suffix;
+				
+					struct.get(id).addNode(this.nodes.get(parse_id(get_val(entry, key))));
+					
+					i = ix + 2;
+				}
+				else {
+					break;
+				}
+			}
 			
 		}
 	}
@@ -211,38 +233,7 @@ public class NodeList {
 		
 	}
 	
-	public void parse_node(String in) {
-		LinkedList<String> entries = new LinkedList<String>();
-		
-		//Type A	-	Separates .json into entries; Each entry begins and ends with '{' and '}' respectively.
-		int iR = 0;
-		while(iR > -1) {
-			if(debugLines && searchOut)
-				System.out.println("Searching for entry start...");
-			iR = in.indexOf('{', iR + 1);
-			
-			if(debugLines && searchOut){
-				if(iR > -1)
-					System.out.println("'{' found at index " + iR);
-				else
-					System.out.println("'{' not found");
-			}
-			
-			if(iR > -1) {
-				int iL = in.indexOf('}', iR);
-				
-				if(debugLines && searchOut){
-					if(iL > -1)
-						System.out.println("'}' found at index " + iL);
-					else
-						System.out.println("'}' not found");
-				}
-				
-				if(iL != -1) {
-					entries.add(in.substring(iR, iL + 1));
-				}
-			}
-		}
+	public void parse_node(LinkedList<String> entries) {
 		
 		//First Parse - data into new Nodes
 		//	- id
@@ -255,10 +246,8 @@ public class NodeList {
 			if(debugLines)
 				System.out.println("Parsing id...");
 			int id = parse_id(get_val(entry, "id"));
-			if(debugLines)
+			if(debugLines && valueOut)
 				System.out.println(get_val(entry, "id") + " : " + id);
-			
-//			LocationData loc = null;
 			
 			double lat = Double.parseDouble( get_primitive(entry, "lat") );
 			double lon = Double.parseDouble( get_primitive(entry, "lng") );
@@ -276,7 +265,7 @@ public class NodeList {
 					String suffix = entry.substring(ix, ix + 2);
 					String key = prefix + suffix;
 				
-					nodes.get(id).addStruct(this.struct.get(get_val(in, key)));
+					nodes.get(id).addStruct(this.struct.get(get_val(entry, key)));
 					
 					i = ix + 2;
 				}
@@ -433,10 +422,23 @@ public class NodeList {
 			return null;
 	}
 	
+	public LinkedList<String> structGUI(){
+		LinkedList<String> out = new LinkedList<String>();
+
+		for(String s : struct.keySet()) {
+			out.add(struct.get(s).names.get(0));
+		}
+		
+		return out;
+	}
+	
 	public String toString() {
 		String out = "";
 		for(Integer k : nodes.keySet()) {
 			out = out + nodes.get(k).toString() + "\n";
+		}
+		for(String k : struct.keySet()) {
+			out = out + struct.get(k).toString() + "\n";
 		}
 		
 		return out;
