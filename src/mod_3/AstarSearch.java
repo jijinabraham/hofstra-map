@@ -1,25 +1,38 @@
 package mod_3;
 
 import java.util.*;
+import hofstramappingapplication.*;
 
 //Class for search
 public class AstarSearch
 {
-	//PriorityQueue for frontier
+	// PriorityQueue for frontier
 	protected PriorityQueue<NodeSearch> frontier;
-	//List for interior
+	
+	// List for interior
 	protected LinkedList<NodeSearch> interior;
 	
+	//
 	protected NodeSearch start, end;
+	protected LinkedList<NodeSearch> route;
+	//private boolean found = false;
 	
-	private boolean found = false;
-	
-	//Debug Flags
+	// Debug Flags
 		boolean debugLines = false;											// Set to true if you want to see debug output
 		boolean searchOut = true;											// Set to true to see debug search messages
 		boolean valueOut = true;											// Set to true to see values for debug purposes
 		boolean expandOut = false;
 	
+	public AstarSearch() {
+		start = null;
+		end = null;
+		
+		frontier = null;
+		end = null;
+	}
+	public AstarSearch(Node start, Node end) {
+		this((NodeSearch)start, (NodeSearch)end);
+	}
 	public AstarSearch(NodeSearch start, NodeSearch end)
 	{
 		this.start = start;
@@ -28,28 +41,83 @@ public class AstarSearch
 		frontier = new PriorityQueue<NodeSearch>();
 		interior = new LinkedList<NodeSearch>();
 		
-//		search();
+		search();
 	}
 	
 	/**
-	 * 
+	 * Used in the event a search has multiple potential start and/or end points.
+	 * This method will select the pair with the least estimated distance before searching.
 	 * @param loc
 	 * @param target
 	 * @return
 	 */
-	public LinkedList<NodeSearch> search(List<NodeSearch> loc, List<NodeSearch> target){
+	public LinkedList<NodeSearch> search(List<NodeSearch> list_start, List<NodeSearch> list_target){
+		// Check if lists are valid
+		if(list_start == null || list_target == null || list_start.isEmpty() || list_target.isEmpty()) {
+			return null;
+		}
+
+		// Select closest pair
+		NodeSearch to_start = list_start.get(0);
+		NodeSearch to_end = list_target.get(0);
+		double to_est = to_start.getEstimatedCost(to_end);
 		
+		for(NodeSearch ns : list_start) {
+			for(NodeSearch nt : list_target) {
+				double temp_est = ns.getEstimatedCost(nt);
+				if(temp_est < to_est) {
+					to_start = ns;
+					to_end = nt;
+					to_est = temp_est;
+				}
+			}
+		}
+		
+		// Set start and end nodes
+		this.start = to_start;
+		this.end = to_end;
+		
+		// Search then return route
 		return search();
 	}
 	
-	public LinkedList<NodeSearch> search(NodeSearch loc, NodeSearch target){
-		this.start = loc;
+	/**
+	 * Begins a new search using new start and target nodes.
+	 * @param loc
+	 * @param target
+	 * @return
+	 */
+	public LinkedList<NodeSearch> search(NodeSearch start, NodeSearch target){
+		// Set start and end nodes
+		this.start = start;
 		this.end = target;
+		
+		// Search then return route
 		return search();
 	}
 	
-	public LinkedList<NodeSearch> search()
+	/**
+	 * Runs the search then returns the route (contains only the nodes along the path)
+	 * @return
+	 */
+	public LinkedList<NodeSearch> search(){
+		_search();
+		return build_route();
+	}
+	
+	/**
+	 * Search algorithm. Returns interior.
+	 * @return
+	 */
+	public LinkedList<NodeSearch> _search()
 	{
+		if(frontier == null || !frontier.isEmpty()) {
+			frontier = new PriorityQueue<NodeSearch>();
+		}
+		if(interior == null || !interior.isEmpty()) {
+			interior = new LinkedList<NodeSearch>();
+		}	
+		
 		start.costFromStart = 0;
 		start.estimatedCostToGoal = start.getEstimatedCost(end);
 		start.pathParent = null; //starting node doesnt have parent
@@ -155,10 +223,12 @@ public class AstarSearch
 		return null;
 	}
 	
-	public String toString() {		
-		String out = "";
+	/**
+	 * Builds a list containing only nodes along the path, and stores it as route.
+	 * @return
+	 */
+	public LinkedList<NodeSearch> build_route(){
 		if(interior != null) {
-			out += "Route:\n";
 			NodeSearch cn = interior.getLast();
 			LinkedList<NodeSearch> route = new LinkedList<NodeSearch>();
 			
@@ -166,7 +236,24 @@ public class AstarSearch
 				route.addFirst(cn);
 				cn = cn.pathParent;
 			}
+			
+			this.route = route;
+			return route;
+		}
+		else {
+			return null;
+		}
+	}
 
+	public String toString() {		
+		String out = "";
+		if(interior != null) {
+			out += "Route:\n";
+	
+			if(route == null) {
+				build_route();
+			}
+	
 			double total_dist = 0;
 			
 			for(int i = 0; i < route.size(); i++) {
@@ -174,7 +261,9 @@ public class AstarSearch
 				out += ".\t";
 				
 				NodeSearch cns = route.get(i);
-				double step_dist = cns.neighbours().get(cns.pathParent.id()).dist();
+				double step_dist = cns.neighbours()					// Get the HashMap of neighbours
+										.get(cns.pathParent.id())	// Gets the Link to pathParent
+										.dist();					// Gets the length of the link
 				
 				out += String.format("%07X", cns.parent().id());
 				out += " -> ";
@@ -187,38 +276,6 @@ public class AstarSearch
 			
 			out += "approx. " + total_dist + "m\n";
 			
-		}
-		else
-			out = "null";
-			
-		return out;
-	}
-	
-	public String toString_reverse() {		
-		String out = "";
-		if(interior != null) {
-			out += "Route:\n";
-			NodeSearch cn = interior.getLast();
-			int i = 1;
-			double total_dist = 0;
-			
-			while(cn.pathParent != null) {
-				out += i;
-				out += ".\t";
-				
-				double step_dist = cn.neighbours().get(cn.pathParent.id()).dist();
-				
-				out += String.format("%07X", cn.parent().id());
-				out += " -> ";
-				out += String.format("%07X", cn.id());
-				out += ", " + step_dist + "m\n";
-				
-				total_dist += step_dist;
-				
-				cn = cn.pathParent;
-				i++;
-			}
-			out += "approx. " + total_dist + "m\n";
 		}
 		else
 			out = "null";
