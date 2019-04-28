@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:openDrawer="right">
 
     <RelativeLayout
         android:id="@+id/content_frame"
@@ -17,9 +17,13 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="0dp"
             android:background="@color/colorBlue"
             android:theme="@style/DrawerActionTextColor"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        </android.support.v7.widget.Toolbar>
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             android:name="com.google.android.gms.maps.MapFragment"
@@ -28,6 +32,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar"
             />
+
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView

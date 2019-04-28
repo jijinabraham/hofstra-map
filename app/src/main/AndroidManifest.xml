@@ -18,7 +18,13 @@
         <activity android:name=".Location"></activity>
         <activity android:name=".Setting" />
         <activity android:name=".tutorial" />
-        <activity android:name=".drawer" />
+        <activity android:name=".drawer" >
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -29,7 +35,8 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key"
+            />
 
         <activity
             android:name=".MapsActivity"
