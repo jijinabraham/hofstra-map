@@ -13,16 +13,33 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
+import java.io.InputStream;
+import java.util.LinkedList;
+import java.io.File;
+
+import com.example.myapplication.mod1.NodeList;
+
 public class Location extends AppCompatActivity {
 
     ListView listView;
-    String mTitle[] = {"Adams Hall", "Weed Hall", "Hofstra Hall", "Memorial Hall"};
-    String mSubTitle[] = {"Department of Computer Science", "Department of Engineering", "Main Hall", "Bits & Bytes"};
+    String mTitle[];
+    String mSubTitle[];
+    LinkedList<String> temp;
+    //convert LinkedList to array
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
+
+        InputStream h = getResources().openRawResource(R.raw.node_hor);
+        InputStream v = getResources().openRawResource(R.raw.node_ver);
+        InputStream s = getResources().openRawResource(R.raw.struct);
+
+        NodeList name_me = new NodeList(h,v,s);
+        temp = name_me.structGUI();
+
+        mTitle = convertor(temp);
 
         listView = findViewById(R.id.locationList);
 
@@ -35,6 +52,17 @@ public class Location extends AppCompatActivity {
 
             }
         });
+    }
+    public String[] convertor(LinkedList<String> list)
+    {
+        String arList[] = new String[list.size()];
+        int i = 0;
+        for(String s : list)
+        {
+            arList[i] = s;
+            i++;
+        }
+        return arList;
     }
 
     class LocationListAdaptor extends ArrayAdapter<String>
@@ -59,7 +87,7 @@ public class Location extends AppCompatActivity {
             TextView subTitle = row.findViewById(R.id.subTitle);
 
             mainTitle.setText(mTitle[position]);
-            subTitle.setText(mSubTitle[position]);
+//            subTitle.setText(mSubTitle[position]);
 
 
             return row;
