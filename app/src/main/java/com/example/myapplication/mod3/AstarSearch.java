@@ -31,7 +31,7 @@ public class AstarSearch
 		end = null;
 	}
 	public AstarSearch(Node start, Node end) {
-		this((NodeSearch)start, (NodeSearch)end);
+		this(new NodeSearch(start), new NodeSearch (end));
 	}
 	public AstarSearch(NodeSearch start, NodeSearch end)
 	{
@@ -43,12 +43,28 @@ public class AstarSearch
 		
 		search();
 	}
-	
+
+	public LinkedList<NodeSearch> search(Struct start, Struct target){
+		search(start.getNodeList(), target.getNodeList());
+
+		return null;
+	}
+	public LinkedList<NodeSearch> search(LinkedList<Node> list_start, LinkedList<Node> list_target){
+		LinkedList<NodeSearch> temp_start = new LinkedList<NodeSearch>();
+		LinkedList<NodeSearch> temp_target = new LinkedList<NodeSearch>();
+		for(Node n : list_start){
+			temp_start.add(new NodeSearch(n));
+		}
+		for(Node n : list_target){
+			temp_target.add(new NodeSearch(n));
+		}
+		return search(temp_start, temp_target);
+	};
 	/**
 	 * Used in the event a search has multiple potential start and/or end points.
 	 * This method will select the pair with the least estimated distance before searching.
-	 * @param loc
-	 * @param target
+	 * @param list_start
+	 * @param list_target
 	 * @return
 	 */
 	public LinkedList<NodeSearch> search(List<NodeSearch> list_start, List<NodeSearch> list_target){
@@ -80,13 +96,7 @@ public class AstarSearch
 		// Search then return route
 		return search();
 	}
-	
-	/**
-	 * Begins a new search using new start and target nodes.
-	 * @param loc
-	 * @param target
-	 * @return
-	 */
+
 	public LinkedList<NodeSearch> search(NodeSearch start, NodeSearch target){
 		// Set start and end nodes
 		this.start = start;
@@ -236,13 +246,21 @@ public class AstarSearch
 				route.addFirst(cn);
 				cn = cn.pathParent;
 			}
-			
+			route.addFirst(start);
 			this.route = route;
 			return route;
 		}
 		else {
 			return null;
 		}
+	}
+
+	public LinkedList<Node> route_to_node(){
+		LinkedList<Node> temp = new LinkedList<Node>();
+		for(NodeSearch ns : route){
+			temp.add(ns.to_node());
+		}
+		return temp;
 	}
 
 	public String toString() {		
@@ -256,8 +274,8 @@ public class AstarSearch
 	
 			double total_dist = 0;
 			
-			for(int i = 0; i < route.size(); i++) {
-				out += i+1;
+			for(int i = 1; i < route.size(); i++) {
+				out += i;
 				out += ".\t";
 				
 				NodeSearch cns = route.get(i);

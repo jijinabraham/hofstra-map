@@ -492,7 +492,16 @@ public class NodeList {
 		
 		return out;
 	}
-	
+
+	public Struct searchStruct(String name){
+		for(String k : struct.keySet()){
+			if(struct.get(k).names.contains(name)){
+				return struct.get(k);
+			}
+		}
+		return null;
+	}
+
 	public String toString() {
 		String out = "";
 		for(Integer k : nodes.keySet()) {

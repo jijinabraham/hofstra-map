@@ -152,5 +152,10 @@ public class Node{
 		
 		return out;
 	}
+
+	public LocationData getCoord()
+	{
+		return coord;
+	}
 	
 }
