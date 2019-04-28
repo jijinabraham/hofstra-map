@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import java.io.File;
 import com.example.myapplication.mod1.NodeList;
 
 public class Location extends AppCompatActivity {
+
+    private final int SEND_LOCATION = 1;
 
     ListView listView;
     String mTitle[];
@@ -49,7 +52,9 @@ public class Location extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(getApplicationContext(), drawer.class);
+                intent.putExtra("location",listView.getItemAtPosition(position).toString());
+                startActivityForResult(intent, SEND_LOCATION);
             }
         });
     }

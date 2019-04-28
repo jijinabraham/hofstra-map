@@ -45,7 +45,24 @@ public class Struct{
 		}
 		return false;
 	}
-	
+
+	public LocationData getPos(){
+		return pos;
+	}
+	public LinkedHashMap<Integer, Node> getNodes(){
+		return nodes;
+	}
+	public LinkedList<Node> getNodeList(){
+		if(nodes.size() == 0){
+			return null;
+		}
+		LinkedList<Node> list = new LinkedList<Node>();
+		for(Integer k : nodes.keySet()){
+			list.add(nodes.get(k));
+		}
+		return list;
+	}
+
 	public String toString() {
 		String out = "" + id;
 		

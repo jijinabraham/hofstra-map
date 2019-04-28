@@ -30,7 +30,9 @@ public class NodeSearch extends Node implements Comparable<Node>{
 		
 		
 	}
-	
+
+
+
 	public double getEstimatedCost(NodeSearch other) {
 		return getEstimatedCost(this.coord, other.coord);
 	}
@@ -64,6 +66,10 @@ public class NodeSearch extends Node implements Comparable<Node>{
 		
 		return est;
 	}
+
+	public Node to_node(){
+		return new Node(this);
+	}
 	
 	public int id() {
 		return id;
@@ -71,7 +77,7 @@ public class NodeSearch extends Node implements Comparable<Node>{
 	public NodeSearch parent() {
 		return pathParent;
 	}
-	
+
 	//Get the list of all child aka neighbors
 	public List<NodeSearch> getNeighbors() {
 		List<NodeSearch> nb = new LinkedList<NodeSearch>();
