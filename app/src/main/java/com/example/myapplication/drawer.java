@@ -29,15 +29,14 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.*;
 
 
 public class drawer extends AppCompatActivity implements OnMapReadyCallback {
@@ -45,7 +44,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
     private final int RESULT_CODE_1 = 1;
     private DrawerLayout drawerLayout;
     private NodeList data;
-    public GoogleMap mGoogleMap;
+    GoogleMap mMap;
     private ArrayList<Marker> mMarker = new ArrayList<Marker>();
     private Polyline route;
 
@@ -56,6 +55,12 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_drawer);
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        if (googleServiceAvailable())
+        {
+            Snackbar.make(findViewById(R.id.drawer_layout), "Good to Start", Snackbar.LENGTH_SHORT).show();
+            initMap();
+        }
 
         data = getData();
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -106,11 +111,6 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
                 }
         );
 
-        if (googleServiceAvailable())
-        {
-            Snackbar.make(findViewById(R.id.drawer_layout), "Good to Start", Snackbar.LENGTH_SHORT).show();
-            initMap();
-        }
     }
 
     @Override
@@ -131,7 +131,9 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.location_menu, menu);
 
-        // Associate searchable configuration with the SearchView
+        MenuItem searchItem = menu.findItem(R.id.location_search);
+
+        //Associate searchable configuration with the SearchView
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
@@ -153,28 +155,28 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-
-            if (query == null)
-            {
-                Snackbar.make(findViewById(R.id.drawer_layout), "Null Location", Snackbar.LENGTH_SHORT).show();
-                return;
-            }
-            LinkedList<String> temp = data.structGUI();
-            if(temp.contains(query))
-            {
-                Snackbar.make(findViewById(R.id.drawer_layout), R.string.no_such_location, Snackbar.LENGTH_SHORT).show();
-            } else
-            {
-                for(int indexOf = 0; indexOf < data.structGUI().size(); indexOf++)
-                {
-                    if (temp.get(indexOf).equals(query))
-                    {
-                        Snackbar.make(findViewById(R.id.drawer_layout), "Location Found", Snackbar.LENGTH_SHORT).show();
-                    }
-                }
-            }
+            doSearch(query);
         }
     }
+
+
+    //Search view
+    private void doSearch(String query)
+    {
+        if(query == null)
+        {
+            Snackbar.make(findViewById(R.id.drawer_layout),"Null Location, errors", Snackbar.LENGTH_SHORT);
+            return;
+        } else if (data.searchStruct(query) == null)
+        {
+            Snackbar.make(findViewById(R.id.drawer_layout),"No such Location", Snackbar.LENGTH_SHORT);
+            return;
+        }
+        LatLng pos = new LatLng(data.searchStruct(query).getPos().getLat(),data.searchStruct(query).getPos().getLon());
+        removeEverything();
+        System.out.println(pos.latitude + " " + pos.longitude);
+        setMarker(pos.latitude,pos.longitude);
+}
 
     /*
      Init Data
@@ -194,9 +196,9 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
      */
      private void initMap()
      {
-         SupportMapFragment supportMapFragment = (SupportMapFragment)getSupportFragmentManager()
+         MapFragment mapFragment = (MapFragment)getFragmentManager()
                  .findFragmentById(R.id.map_view);
-         supportMapFragment.getMapAsync(this);
+         mapFragment.getMapAsync(this);
      }
 
      private boolean googleServiceAvailable()
@@ -219,12 +221,16 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
 
      @Override
      public void onMapReady(GoogleMap googleMap) {
-         mGoogleMap = googleMap;
+         this.mMap = googleMap;
+         System.out.println(mMap == null);
 
-         //LatLng origin = new LatLng(data.find(R.string.hofstra_hall).getCoord().getLat(), data.find(R.string.hofstra_hall).getCoord().getLon());
+         /* LatLng origin = new LatLng(data.find(R.string.hofstra_hall).getCoord().
+         getLat(), data.find(R.string.hofstra_hall).getCoord().getLon()); */
          LatLng origin = new LatLng(40.71404307257277, -73.6003861264611);
 
-         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 17.5f));
+         //mMap.addMarker(new MarkerOptions().position(origin));
+
+         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 17.5f));
          drawPolyLine("Adams Hall", "Weed Hall");
      }
 
@@ -266,7 +272,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
          }
          ArrayList<LatLng> routeCoord = searchRoute(startpt, endpt);
          removeEverything();
-         route = mGoogleMap.addPolyline(new PolylineOptions()
+         route = mMap.addPolyline(new PolylineOptions()
             .addAll(routeCoord));
      }
 
@@ -275,7 +281,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
      {
          LatLng mPosition = new LatLng(lat, lng);
          CameraUpdate updatePosition = CameraUpdateFactory.newLatLngZoom(mPosition, zoom);
-         mGoogleMap.moveCamera(updatePosition);
+         mMap.moveCamera(updatePosition);
      }
 
      //Set one marker at lat and lng
@@ -283,15 +289,17 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
      {
          LatLng thisLatLng = new LatLng(lat,lng);
          //remove all marker is there are 2 or more markers currently present
-         if(mMarker.size() >= 2)
-         {
-             removeEverything();
-         }
 
          MarkerOptions newOption = new MarkerOptions()
                  .position(thisLatLng);
 
-         mMarker.add(mGoogleMap.addMarker(newOption));
+         if (this.mMap == null)
+         {
+             System.out.println(this.mMap == null);
+         }
+
+         this.mMap.addMarker(newOption);
+         //mMarker.add(newOption);
      }
 
 
@@ -303,6 +311,10 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
              marker.remove();
          }
          mMarker.clear();
+         if (route != null)
+         {
+             route.remove();
+         }
      }
 
 
@@ -318,5 +330,33 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
                  setMarker(latLng.getLat(),latLng.getLon());
                  break;
          }
+     }
+
+     public List<String> divide_input(String in, char div){
+         String temp = in;
+         LinkedList<String> list = new LinkedList<String>();
+
+         //Messy Divide
+         while( !(temp.indexOf(div, 1) < 0) ){
+             int iDiv = in.indexOf(div, 1);
+
+             list.add(temp.substring(0, iDiv));
+             temp = temp.substring(iDiv);
+         }
+
+         //Clean Entries
+         if(true){
+             int i = 0;
+             for(String s : list){
+                 if(s.charAt(0) == div && s.length() > 1){
+                     s = s.substring(1);
+                 }
+                 s = s.trim();
+                 list.set(i, s);
+                 i++;
+             }
+         }
+
+         return list;
      }
 }
