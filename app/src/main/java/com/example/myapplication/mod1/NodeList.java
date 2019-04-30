@@ -495,11 +495,28 @@ public class NodeList {
 
 	public Struct searchStruct(String name){
 		for(String k : struct.keySet()){
-			if(struct.get(k).names.contains(name)){
-				return struct.get(k);
+			for(String v : struct.get(k).names){
+				if(name.equalsIgnoreCase(v)){
+					return struct.get(k);
+				}
 			}
 		}
 		return null;
+	}
+
+	public LinkedList<String> searchDepartment(){
+		LinkedList<String> list = new LinkedList<String>();
+		for(String k : struct.keySet()){
+			for(String v : struct.get(k).names){
+				if(v != null && v.toLowerCase().contains("department")){
+					list.add(v);
+				}
+			}
+		}
+		if(list.isEmpty()){
+			return null;
+		}
+		return list;
 	}
 
 	public String toString() {

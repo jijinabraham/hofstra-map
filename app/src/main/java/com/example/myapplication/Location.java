@@ -32,6 +32,7 @@ public class Location extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
@@ -41,8 +42,10 @@ public class Location extends AppCompatActivity {
 
         NodeList name_me = new NodeList(h,v,s);
         temp = name_me.structGUI();
+        LinkedList<String> pmet = name_me.searchDepartment();
 
         mTitle = convertor(temp);
+        mSubTitle = convertor(pmet);
 
         listView = findViewById(R.id.locationList);
 
@@ -64,11 +67,9 @@ public class Location extends AppCompatActivity {
     public String[] convertor(LinkedList<String> list)
     {
         String arList[] = new String[list.size()];
-        int i = 0;
-        for(String s : list)
+        for(int i = 0; i < list.size(); i++)
         {
-            arList[i] = s;
-            i++;
+            arList[i] = list.get(i);
         }
         return arList;
     }
@@ -95,7 +96,8 @@ public class Location extends AppCompatActivity {
             TextView subTitle = row.findViewById(R.id.subTitle);
 
             mainTitle.setText(mTitle[position]);
-//            subTitle.setText(mSubTitle[position]);
+            //subTitle.setText(mSubTitle[position]);
+
 
 
             return row;

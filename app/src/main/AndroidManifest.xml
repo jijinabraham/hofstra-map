@@ -11,12 +11,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:fullBackupContent="true"
+        android:icon="@mipmap/ic_real_launcher_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_real_launcher_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Location"></activity>
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar.Launcher">
+
+        <activity android:name=".Location"/>
         <activity android:name=".Setting" />
         <activity android:name=".tutorial" />
         <activity android:name=".drawer" >

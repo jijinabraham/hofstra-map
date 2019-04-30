@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PageFragment extends Fragment {
@@ -16,10 +17,22 @@ public class PageFragment extends Fragment {
         final View view;
         Bundle bundle = getArguments();
         int pageNumber = bundle.getInt("pageNumber");
+        System.out.println(pageNumber);
 
         view = inflater.inflate(R.layout.page_fragment_layout, container, false);
-        TextView textView = (TextView)view.findViewById(R.id.pageNumber);
-        textView.setText(Integer.toString(pageNumber));
+        ImageView imageView = (ImageView) view.findViewById(R.id.page_image);
+        switch (pageNumber)
+        {
+            case 1:
+                imageView.setImageResource(R.drawable.system_tutorial_1);
+                break;
+            case 2:
+                imageView.setImageResource(R.drawable.system_tutorial_2);
+                break;
+        }
+
+        //TextView textView = (TextView)view.findViewById(R.id.pageNumber);
+        //textView.setText(Integer.toString(pageNumber));
 
         return view;
     }
