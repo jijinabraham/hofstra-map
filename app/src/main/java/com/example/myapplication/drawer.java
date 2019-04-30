@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
@@ -34,8 +35,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.io.InputStream;
 import java.util.*;
@@ -48,6 +49,10 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
     private NodeList data;
     static GoogleMap mMap;
     Button button;
+
+    private LatLngBounds boundary = new LatLngBounds(
+            new LatLng(40.70922566079975, -73.60417459049074), new LatLng(40.722864647617915, -73.59362455002719));
+
 
 
     @Override
@@ -92,7 +97,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
          */
 
 
-        handleIntent(getIntent());
+        //handleIntent(getIntent());
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -148,12 +153,32 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.location_menu, menu);
+        final MenuItem searchItem = menu.findItem(R.id.location_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                doSearch(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+
+        /*
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.location_menu, menu);
 
         //MenuItem searchItem = menu.findItem(R.id.location_search);
 
         //Associate searchable configuration with the SearchView
+
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
@@ -161,6 +186,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
+        */
 
         return true;
     }
@@ -173,7 +199,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
         setIntent(intent);
         handleIntent(intent);
     }
-    */
+
     private void handleIntent(Intent intent) {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -182,7 +208,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
             doSearch(query);
         }
     }
-
+    */
 
     //Search view
     private void doSearch(String query)
@@ -196,6 +222,8 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
             List<String> temp = divide_input(query, ',');
             removeEverything();
             drawPolyLine(temp.get(0), temp.get(1));
+            setMarker(getLatLngBasedOnString(temp.get(0)).latitude,getLatLngBasedOnString(temp.get(0)).longitude);
+            setMarker(getLatLngBasedOnString(temp.get(1)).latitude,getLatLngBasedOnString(temp.get(1)).longitude);
         } else if (data.searchStruct(query) == null)
         {
             Snackbar.make(findViewById(R.id.drawer_layout),"No such Location", Snackbar.LENGTH_SHORT);
@@ -254,6 +282,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
      @Override
      public void onMapReady(GoogleMap googleMap) {
          mMap = googleMap;
+         mMap.setLatLngBoundsForCameraTarget(boundary);
          //System.out.println(mMap == null);
 
          /* LatLng origin = new LatLng(data.find(R.string.hofstra_hall).getCoord().
@@ -399,6 +428,12 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
          }
 
          return list;
+     }
+
+     public LatLng getLatLngBasedOnString(String s)
+     {
+         LatLng pos = new LatLng(data.searchStruct(s).getPos().getLat(), data.searchStruct(s).getPos().getLon());
+         return pos;
      }
 
 }

@@ -9,6 +9,8 @@ public class NodeSearch extends Node implements Comparable<Node>{
 	public double costFromStart;  //G value 
 	public double estimatedCostToGoal;  //H value
 
+	private float weight = .9f;
+
 	public NodeSearch(Node n) {
 		super(n);
 	}
@@ -63,6 +65,8 @@ public class NodeSearch extends Node implements Comparable<Node>{
 		
 		//lat lon diff -> meters (double)
 		double est = r * delta;
+
+		est = est * weight;
 		
 		return est;
 	}
