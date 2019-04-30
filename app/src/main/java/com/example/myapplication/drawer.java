@@ -46,7 +46,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
     private final int RESULT_CODE_1 = 1;
     private DrawerLayout drawerLayout;
     private NodeList data;
-    GoogleMap mMap;
+    static GoogleMap mMap;
     Button button;
 
 
@@ -167,12 +167,13 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
 
     /*
       Search Bar Intent
-     */
+
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
         handleIntent(intent);
     }
+    */
     private void handleIntent(Intent intent) {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -194,7 +195,6 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
         {
             List<String> temp = divide_input(query, ',');
             removeEverything();
-            System.out.println(temp.get(0) + " " + temp.get(1));
             drawPolyLine(temp.get(0), temp.get(1));
         } else if (data.searchStruct(query) == null)
         {
@@ -264,6 +264,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
 
          mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 17.5f));
          //drawPolyLine("Adams Hall", "Weed Hall");
+         //handleIntent(getIntent());
      }
 
      //Internal function for drawPolyLine
@@ -399,4 +400,5 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
 
          return list;
      }
+
 }
