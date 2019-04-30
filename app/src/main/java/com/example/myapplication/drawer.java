@@ -22,6 +22,7 @@ import android.content.Context;
 import android.widget.Button;
 import android.widget.Toast;
 import android.view.View;
+import android.content.res.Resources.Theme;
 
 
 import com.example.myapplication.mod1.*;
@@ -57,6 +58,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -116,6 +118,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
                             case R.id.nav_place:
                                 startIntent = new Intent(getApplicationContext(), Location.class);
                                 startActivityForResult(startIntent, RESULT_CODE_1);
+
                                 break;
 
                             case R.id.nav_help:
@@ -289,7 +292,6 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
          mMap.setLatLngBoundsForCameraTarget(boundary);
 
          LatLng origin = new LatLng(40.71404307257277, -73.6003861264611);
-         mMap.setMyLocationEnabled(true);
 
          mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 17.5f));
      }
@@ -375,6 +377,10 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
      @Override
      protected void onActivityResult(int requestCode, int resultCode, Intent dataIntent)
      {
+         if(dataIntent == null)
+         {
+             return;
+         }
          super.onActivityResult(requestCode, resultCode, dataIntent);
          switch (requestCode)
          {
@@ -433,5 +439,23 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
          LatLng pos = new LatLng(data.searchStruct(s).getPos().getLat(), data.searchStruct(s).getPos().getLon());
          return pos;
      }
+
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+    }
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+    }
 
 }
