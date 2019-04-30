@@ -55,10 +55,10 @@ public class NodeSearch extends Node implements Comparable<Node>{
 		
 		double delta = Math.toRadians(60);
 		if(c > r) {
-			delta = Math.asin(r / c);
+			delta = 2 * Math.asin(r / (c/2));
 		}
 		else if (c < r) {
-			delta = Math.asin(c / r);
+			delta = 2 * Math.asin((c/2) / r);
 		}
 		
 		//lat lon diff -> meters (double)

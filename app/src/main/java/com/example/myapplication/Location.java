@@ -54,7 +54,10 @@ public class Location extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), drawer.class);
                 intent.putExtra("location",listView.getItemAtPosition(position).toString());
-                startActivityForResult(intent, SEND_LOCATION);
+                //System.out.println(listView.getItemAtPosition(position).toString());
+                //startActivityForResult(intent, SEND_LOCATION);
+                setResult(SEND_LOCATION, intent);
+                finish();
             }
         });
     }
