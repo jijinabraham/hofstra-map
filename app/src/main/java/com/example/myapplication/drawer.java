@@ -157,6 +157,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
         final MenuItem searchItem = menu.findItem(R.id.location_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
+        //Listen for User Text Query
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -172,6 +173,9 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
 
 
         /*
+        *
+        * *OUTDATED SEARCH VIEW
+        *
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.location_menu, menu);
 
@@ -193,6 +197,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
 
     /*
       Search Bar Intent
+      OUTDATED SEARCH VIEW, DON'T USE
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -231,8 +236,7 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
         else {
             LatLng pos = new LatLng(data.searchStruct(query).getPos().getLat(), data.searchStruct(query).getPos().getLon());
             removeEverything();
-            //System.out.println(pos.latitude + " " + pos.longitude);
-            //mMap.addMarker(new MarkerOptions().position(pos));
+
             setMarker(pos.latitude, pos.longitude);
             goToLocationandZoom(pos.latitude,pos.longitude,17.5f);
         }
@@ -283,17 +287,11 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
      public void onMapReady(GoogleMap googleMap) {
          mMap = googleMap;
          mMap.setLatLngBoundsForCameraTarget(boundary);
-         //System.out.println(mMap == null);
 
-         /* LatLng origin = new LatLng(data.find(R.string.hofstra_hall).getCoord().
-         getLat(), data.find(R.string.hofstra_hall).getCoord().getLon()); */
          LatLng origin = new LatLng(40.71404307257277, -73.6003861264611);
-
-         //mMap.addMarker(new MarkerOptions().position(origin));
+         mMap.setMyLocationEnabled(true);
 
          mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 17.5f));
-         //drawPolyLine("Adams Hall", "Weed Hall");
-         //handleIntent(getIntent());
      }
 
      //Internal function for drawPolyLine
