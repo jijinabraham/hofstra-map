@@ -224,17 +224,22 @@ public class drawer extends AppCompatActivity implements OnMapReadyCallback {
         System.out.println(query.indexOf(','));
         if(query == null)
         {
-            Snackbar.make(findViewById(R.id.drawer_layout),"Null Location, errors", Snackbar.LENGTH_SHORT);
+            Snackbar.make(findViewById(R.id.drawer_layout),"Null Location, errors", Snackbar.LENGTH_SHORT).show();
         } else if (query.indexOf(',') > 0)
         {
             List<String> temp = divide_input(query, ',');
+            if(data.searchStruct(temp.get(0)) == null || data.searchStruct(temp.get(1)) == null)
+            {
+                Snackbar.make(findViewById(R.id.drawer_layout),"Invalid Input, check spelling of the building. ONLY enter two structure name!", Snackbar.LENGTH_LONG).show();
+                return;
+            }
             removeEverything();
             drawPolyLine(temp.get(0), temp.get(1));
             setMarker(getLatLngBasedOnString(temp.get(0)).latitude,getLatLngBasedOnString(temp.get(0)).longitude);
             setMarker(getLatLngBasedOnString(temp.get(1)).latitude,getLatLngBasedOnString(temp.get(1)).longitude);
         } else if (data.searchStruct(query) == null)
         {
-            Snackbar.make(findViewById(R.id.drawer_layout),"No such Location", Snackbar.LENGTH_SHORT);
+            Snackbar.make(findViewById(R.id.drawer_layout),"No such Location", Snackbar.LENGTH_SHORT).show();
         }
         else {
             LatLng pos = new LatLng(data.searchStruct(query).getPos().getLat(), data.searchStruct(query).getPos().getLon());
