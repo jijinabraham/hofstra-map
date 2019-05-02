@@ -44,24 +44,18 @@ public class NodeSearch extends Node implements Comparable<Node>{
 		//h(n) = 6(shortest distance between two points) * shortest # of nodes to goal
 		double r = 6378100.0;
 		
-		double theta = from.getLat() - to.getLat();				// Degree diff
-		theta = Math.toRadians(theta); 
-		
-		double phi = from.getLon() - to.getLon();				// Degree diff
+		double theta = Math.abs(from.getLat() - to.getLat());				// Degree diff
+		theta = Math.toRadians(theta);
+
+		double phi = Math.abs(from.getLon() - to.getLon());				// Degree diff
 		phi = Math.toRadians(phi);
 		
-		double ct = 2 * r * Math.sin(theta / 2);								// 2r sin(theta / 2)
-		double cp = 2 * r * Math.sin(phi / 2);									// 2r sin(phi / 2)
+		double ct = 2 * r * Math.sin((theta/2) / 2);								// 2r sin(theta / 2)
+		double cp = 2 * r * Math.sin((phi/2) / 2);									// 2r sin(phi / 2)
 		
 		double c = Math.sqrt(Math.pow(ct, 2) + Math.pow(cp, 2));				// c = sqrt( ct^2 + cp^2 )
 		
-		double delta = Math.toRadians(60);
-		if(c > r) {
-			delta = 2 * Math.asin(r / (c/2));
-		}
-		else if (c < r) {
-			delta = 2 * Math.asin((c/2) / r);
-		}
+		double delta = 2 * Math.asin((c/2) / r);
 		
 		//lat lon diff -> meters (double)
 		double est = r * delta;
