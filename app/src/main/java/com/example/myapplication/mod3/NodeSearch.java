@@ -45,15 +45,15 @@ public class NodeSearch extends Node implements Comparable<Node>{
 		double r = 6378100.0;
 		
 		double theta = Math.abs(from.getLat() - to.getLat());				// Degree diff
-		theta = Math.toRadians(theta);
+		theta = Math.toRadians(theta);										// Convert to radians
 
-		double phi = Math.abs(from.getLon() - to.getLon());				// Degree diff
-		phi = Math.toRadians(phi);
+		double phi = Math.abs(from.getLon() - to.getLon());					// Degree diff
+		phi = Math.toRadians(phi);											// Convert to radians
 		
-		double ct = 2 * r * Math.sin((theta/2) / 2);								// 2r sin(theta / 2)
-		double cp = 2 * r * Math.sin((phi/2) / 2);									// 2r sin(phi / 2)
-		
-		double c = Math.sqrt(Math.pow(ct, 2) + Math.pow(cp, 2));				// c = sqrt( ct^2 + cp^2 )
+		double ct = 2 * r * Math.sin(theta / 2);							// 2r sin(theta / 2)
+		double cp = 2 * r * Math.sin(phi / 2);								// 2r sin(phi / 2)
+
+		double c = Math.sqrt(Math.pow(ct, 2) + Math.pow(cp, 2));			// c = sqrt( ct^2 + cp^2 )
 		
 		double delta = 2 * Math.asin((c/2) / r);
 		
